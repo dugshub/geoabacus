@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask-sqlalchemy
 Flask-Migrate
+connexion[flask,swagger-ui]
