@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Abacus</title>
+      {% else %}
+      <title>Welcome to Abacus</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Abacus: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
