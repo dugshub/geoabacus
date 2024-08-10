@@ -1,0 +1,119 @@
+,name,label,qualified_name,type,description,primary_tag,secondary_tag
+0,event__category,Category,event__category,CATEGORICAL,This is the description for a dimension,Events,
+1,event__created,Created,event__created,TIME,This is the description for a dimension,Events,Date and Time
+2,event__deleted,Deleted,event__deleted,CATEGORICAL,This is the description for a dimension,Events,Date and Time
+3,event__description,Description,event__description,CATEGORICAL,This is the description for a dimension,Events,
+4,event__destination__can_have_events,Can Have Events,event__destination__can_have_events,CATEGORICAL,This is the description for a dimension,Event Destination,
+5,event__destination__city,City,event__destination__city,CATEGORICAL,This is the description for a dimension,Event Destination,
+6,event__destination__created,Created,event__destination__created,TIME,This is the description for a dimension,Event Destination,Date and Time
+7,event__destination__default_event_length,Default Event Length,event__destination__default_event_length,CATEGORICAL,This is the description for a dimension,Event Destination,
+8,event__destination__deleted,Deleted,event__destination__deleted,CATEGORICAL,This is the description for a dimension,Event Destination,
+9,event__destination__description,Description,event__destination__description,CATEGORICAL,This is the description for a dimension,Event Destination,
+10,event__destination__desktop_zoom_level,Desktop Zoom Level,event__destination__desktop_zoom_level,CATEGORICAL,This is the description for a dimension,Event Destination,
+11,event__destination__destination_id,Destination ID,event__destination__destination_id,CATEGORICAL,This is the description for a dimension,Event Destination,ID Fields
+12,event__destination__generic_destination,Generic Destination,event__destination__generic_destination,CATEGORICAL,This is the description for a dimension,Event Destination,Details
+13,event__destination__hide_event_modal,Hide Event Modal,event__destination__hide_event_modal,CATEGORICAL,This is the description for a dimension,Event Destination,
+14,event__destination__last_updated,Last Updated,event__destination__last_updated,TIME,This is the description for a dimension,Event Destination,
+15,event__destination__location_lat,Location Latitude,event__destination__location_lat,CATEGORICAL,This is the description for a dimension,Event Destination,Address
+16,event__destination__location_lon,Location Longitude,event__destination__location_lon,CATEGORICAL,This is the description for a dimension,Event Destination,Address
+17,event__destination__mobile_zoom_level,Mobile Zoom Level,event__destination__mobile_zoom_level,CATEGORICAL,This is the description for a dimension,Event Destination,
+18,event__destination__monthly_enabled,Monthly Enabled,event__destination__monthly_enabled,CATEGORICAL,This is the description for a dimension,Event Destination,
+19,event__destination__override_ideal_zoom,Override Ideal Zoom,event__destination__override_ideal_zoom,CATEGORICAL,This is the description for a dimension,Event Destination,
+20,event__destination__parent_destination_id,Parent Destination ID,event__destination__parent_destination_id,CATEGORICAL,This is the description for a dimension,Event Destination,ID Fields
+21,event__destination__seatgeek_auto_create,SeatGeek Auto Create,event__destination__seatgeek_auto_create,CATEGORICAL,This is the description for a dimension,Event Destination,Date and Time
+22,event__destination__seatgeek_auto_update,SeatGeek Auto Update,event__destination__seatgeek_auto_update,CATEGORICAL,This is the description for a dimension,Event Destination,
+23,event__destination__seatgeek_destination_title,SeatGeek Destination Title,event__destination__seatgeek_destination_title,CATEGORICAL,This is the description for a dimension,Event Destination,Details
+24,event__destination__seatgeek_performer_id,SeatGeek Performer ID,event__destination__seatgeek_performer_id,CATEGORICAL,This is the description for a dimension,Event Destination,ID Fields
+25,event__destination__show_only_transient,Show Only Transient,event__destination__show_only_transient,CATEGORICAL,This is the description for a dimension,Event Destination,
+26,event__destination__spothero_city_id,SpotHero City ID,event__destination__spothero_city_id,CATEGORICAL,This is the description for a dimension,Event Destination,ID Fields
+27,event__destination__state,State,event__destination__state,CATEGORICAL,This is the description for a dimension,Event Destination,Address
+28,event__destination__status,Status,event__destination__status,CATEGORICAL,This is the description for a dimension,Event Destination,Details
+29,event__destination__street_address,Street Address,event__destination__street_address,CATEGORICAL,This is the description for a dimension,Event Destination,Address
+30,event__destination__title,Title,event__destination__title,CATEGORICAL,This is the description for a dimension,Event Destination,Details
+31,event__destination__venue_content_enabled,Venue Content Enabled,event__destination__venue_content_enabled,CATEGORICAL,This is the description for a dimension,Event Destination,
+32,event__destination__zipcode,Zipcode,event__destination__zipcode,CATEGORICAL,This is the description for a dimension,Event Destination,Address
+33,event__destination_id,Destination ID,event__destination_id,CATEGORICAL,This is the description for a dimension,Event Destination,ID Fields
+34,event__ends,Ends,event__ends,TIME,This is the description for a dimension,Events,Date and Time
+35,event__event_ends_offset,Event Ends Offset,event__event_ends_offset,CATEGORICAL,This is the description for a dimension,Events,Date and Time
+36,event__event_id,Event ID,event__event_id,CATEGORICAL,This is the description for a dimension,Events,ID Fields
+37,event__event_starts_offset,Event Starts Offset,event__event_starts_offset,CATEGORICAL,This is the description for a dimension,Events,Date and Time
+38,event__is_deleted_parent_event,Is Deleted Parent Event,event__is_deleted_parent_event,CATEGORICAL,This is the description for a dimension,Events,
+39,event__is_high_profile,Is High Profile,event__is_high_profile,CATEGORICAL,This is the description for a dimension,Events,
+40,event__last_updated,Last Updated,event__last_updated,TIME,This is the description for a dimension,Events,
+41,event__parent_event_id,Parent Event ID,event__parent_event_id,CATEGORICAL,This is the description for a dimension,Events,ID Fields
+42,event__popularity_score,Popularity Score,event__popularity_score,CATEGORICAL,This is the description for a dimension,Events,
+43,event__seatgeek_destination,SeatGeek Destination,event__seatgeek_destination,CATEGORICAL,This is the description for a dimension,Events,Details
+44,event__seatgeek_id,SeatGeek ID,event__seatgeek_id,CATEGORICAL,This is the description for a dimension,Events,ID Fields
+45,event__seatgeek_update,SeatGeek Update,event__seatgeek_update,CATEGORICAL,This is the description for a dimension,Events,
+46,event__short_description,Short Description,event__short_description,CATEGORICAL,This is the description for a dimension,Events,Details
+47,event__starts,Starts,event__starts,TIME,This is the description for a dimension,Events,Date and Time
+48,event__title,Title,event__title,CATEGORICAL,This is the description for a dimension,Events,Details
+49,facility__account_owner,Account Owner,facility__account_owner,CATEGORICAL,This is the description for a dimension,Canonical Facility,Facility Config Details
+50,facility__canonical_facility__address_id,Address ID,facility__canonical_facility__address_id,CATEGORICAL,This is the description for a dimension,Canonical Facility,Address
+51,facility__canonical_facility__canonical_facility_id,Canonical Facility ID,facility__canonical_facility__canonical_facility_id,CATEGORICAL,This is the description for a dimension,Canonical Facility,ID Fields
+52,facility__canonical_facility__canonical_facility_title,Canonical Facility Title,facility__canonical_facility__canonical_facility_title,CATEGORICAL,This is the description for a dimension,Canonical Facility,Details
+53,facility__canonical_facility__external_id,External ID,facility__canonical_facility__external_id,CATEGORICAL,This is the description for a dimension,Canonical Facility,ID Fields
+54,facility__canonical_facility__facility_currency,Facility Currency,facility__canonical_facility__facility_currency,CATEGORICAL,This is the description for a dimension,Canonical Facility,
+55,facility__canonical_facility__facility_timezone,Facility Timezone,facility__canonical_facility__facility_timezone,CATEGORICAL,This is the description for a dimension,Canonical Facility,Date and Time
+56,facility__canonical_facility__is_airport_facility,Is Airport Facility,facility__canonical_facility__is_airport_facility,CATEGORICAL,This is the description for a dimension,Canonical Facility,
+57,facility__canonical_facility__reporting_market,Reporting Market,facility__canonical_facility__reporting_market,CATEGORICAL,This is the description for a dimension,Geography,Reporting Market
+58,facility__canonical_facility__reporting_market_top_6_canada,Reporting Market Top 6 Canada,facility__canonical_facility__reporting_market_top_6_canada,CATEGORICAL,This is the description for a dimension,Geography,Reporting Market
+59,facility__canonical_facility__reporting_market_top_8,Reporting Market Top 8,facility__canonical_facility__reporting_market_top_8,CATEGORICAL,This is the description for a dimension,Geography,Reporting Market
+60,facility__default_facility_spaces,Default Facility Spaces,facility__default_facility_spaces,CATEGORICAL,This is the description for a dimension,Canonical Facility,Facility Config Details
+61,facility__external_id,External ID,facility__external_id,CATEGORICAL,This is the description for a dimension,Canonical Facility,Facility Config Details
+62,facility__facility_created_at,Facility Created At,facility__facility_created_at,TIME,This is the description for a dimension,Canonical Facility,Facility Config Details
+63,facility__facility_title,Facility Title,facility__facility_title,CATEGORICAL,This is the description for a dimension,Canonical Facility,Facility Config Details
+64,facility__facility_type,Facility Type,facility__facility_type,CATEGORICAL,This is the description for a dimension,Canonical Facility,Facility Config Details
+65,facility__geography__country_name,Country Name,facility__geography__country_name,CATEGORICAL,This is the description for a dimension,Geography,
+66,facility__geography__county_name,County Name,facility__geography__county_name,CATEGORICAL,This is the description for a dimension,Geography,
+67,facility__geography__geography_id,Geography ID,facility__geography__geography_id,CATEGORICAL,This is the description for a dimension,Geography,ID Fields
+68,facility__geography__locality_name,Locality Name,facility__geography__locality_name,CATEGORICAL,This is the description for a dimension,Geography,
+69,facility__geography__neighbourhood_name,Neighbourhood Name,facility__geography__neighbourhood_name,CATEGORICAL,This is the description for a dimension,Geography,
+70,facility__geography__region_name,Region Name,facility__geography__region_name,CATEGORICAL,This is the description for a dimension,Geography,
+71,forex__date,,forex__date,TIME,This is the description for a dimension,Forex,
+72,forex__forex_id,,forex__forex_id,CATEGORICAL,This is the description for a dimension,Forex,
+73,forex__fx_rate,,forex__fx_rate,CATEGORICAL,This is the description for a dimension,Forex,
+74,metric_time,,metric_time__day,TIME,This is the description for a dimension,Date and Time,
+75,rental__event_id,Event ID,rental__event_id,CATEGORICAL,This is the description for a dimension,Rental,ID Fields
+76,rental__facility_configuration_id,Facility Configuration ID,rental__facility_configuration_id,CATEGORICAL,This is the description for a dimension,Rental,ID Fields
+77,rental__is_valid,Is Valid Rental,rental__is_valid,CATEGORICAL,This is the description for a dimension,Rental,Reservation Details
+78,rental__partner_id,Partner ID,rental__partner_id,CATEGORICAL,This is the description for a dimension,Rental,ID Fields
+79,rental__payment_type_title,Payment Type Title,rental__payment_type_title,CATEGORICAL,This is the description for a dimension,Rental,Rental Payment Details
+80,rental__rental_created_at_cst,Rental Created At - CST,rental__rental_created_at_cst,TIME,This is the description for a dimension,Date and Time,Rental
+81,rental__rental_created_at_local,Rental Created At - Local,rental__rental_created_at_local,TIME,This is the description for a dimension,Date and Time,Rental
+82,rental__rental_ends_at_cst,Rental Ends At - CST,rental__rental_ends_at_cst,TIME,This is the description for a dimension,Date and Time,Rental
+83,rental__rental_ends_at_cst_time,Rental Ends At - CST Time,rental__rental_ends_at_cst_time,CATEGORICAL,This is the description for a dimension,Date and Time,Rental
+84,rental__rental_ends_at_local,Rental Ends At - Local,rental__rental_ends_at_local,TIME,This is the description for a dimension,Date and Time,Rental
+85,rental__rental_ends_at_local_time,Rental Ends At - Local Time,rental__rental_ends_at_local_time,CATEGORICAL,This is the description for a dimension,Date and Time,Rental
+86,rental__rental_id,Rental ID,rental__rental_id,CATEGORICAL,This is the description for a dimension,Rental,ID Fields
+87,rental__rental_lead_time,Rental Lead Time,rental__rental_lead_time,CATEGORICAL,This is the description for a dimension,Rental,Lead Time
+88,rental__rental_lead_time_local,Rental Lead Time - Local,rental__rental_lead_time_local,CATEGORICAL,This is the description for a dimension,Rental,Lead Time
+89,rental__rental_length_hours,Rental Length Hours,rental__rental_length_hours,CATEGORICAL,This is the description for a dimension,Rental,Rental Length
+90,rental__rental_length_minutes,Rental Length Minutes,rental__rental_length_minutes,CATEGORICAL,This is the description for a dimension,Rental,Rental Length
+91,rental__rental_payment_status,Rental Payment Status,rental__rental_payment_status,CATEGORICAL,This is the description for a dimension,Rental,Rental Payment Details
+92,rental__rental_payment_type_title,Rental Payment Type Title,rental__rental_payment_type_title,CATEGORICAL,This is the description for a dimension,Rental,Rental Payment Details
+93,rental__rental_reservation_status,Rental Reservation Status,rental__rental_reservation_status,CATEGORICAL,This is the description for a dimension,Rental,Reservation Details
+94,rental__rental_rule_type_title,Rental Rule Type Title,rental__rental_rule_type_title,CATEGORICAL,This is the description for a dimension,Rental,Reservation Details
+95,rental__rental_segment,Rental Segment,rental__rental_segment,CATEGORICAL,This is the description for a dimension,Rental,Rental Segmentation
+96,rental__rental_segment_rollup,Rental Segment Rollup,rental__rental_segment_rollup,CATEGORICAL,This is the description for a dimension,Rental,Rental Segmentation
+97,rental__rental_source_title,Rental Source Title,rental__rental_source_title,CATEGORICAL,This is the description for a dimension,Rental,Reservation Details
+98,rental__rental_starts_at_cst,Rental Starts At - CST,rental__rental_starts_at_cst,TIME,This is the description for a dimension,Date and Time,Rental
+99,rental__rental_starts_at_cst_time,Rental Starts At - CST Time,rental__rental_starts_at_cst_time,CATEGORICAL,This is the description for a dimension,Date and Time,Rental
+100,rental__rental_starts_at_local,Rental Starts At - Local,rental__rental_starts_at_local,TIME,This is the description for a dimension,Date and Time,Rental
+101,rental__rental_starts_at_local_time,Rental Starts At - Local Time,rental__rental_starts_at_local_time,CATEGORICAL,This is the description for a dimension,Date and Time,Rental
+102,rental__renter_id,Renter ID,rental__renter_id,CATEGORICAL,This is the description for a dimension,Rental,ID Fields
+103,renter__date_joined,Date Joined,renter__date_joined,TIME,This is the description for a dimension,Renter Details,Signup and Recency
+104,renter__days_since_first_rental,Days Since First Rental,renter__days_since_first_rental,CATEGORICAL,This is the description for a dimension,Renter Details,Signup and Recency
+105,renter__days_since_last_rental,Days Since Last Rental,renter__days_since_last_rental,CATEGORICAL,This is the description for a dimension,Renter Details,Signup and Recency
+106,renter__email,Email,renter__email,CATEGORICAL,This is the description for a dimension,Renter Details,Details
+107,renter__first_name,First Name,renter__first_name,CATEGORICAL,This is the description for a dimension,Renter Details,Details
+108,renter__first_rental_date,First Rental Date,renter__first_rental_date,TIME,This is the description for a dimension,Renter Details,Signup and Recency
+109,renter__first_rental_id,First Rental ID,renter__first_rental_id,CATEGORICAL,This is the description for a dimension,Renter Details,ID Fields
+110,renter__last_name,Last Name,renter__last_name,CATEGORICAL,This is the description for a dimension,Renter Details,Details
+111,renter__last_rental_date,Last Rental Date,renter__last_rental_date,TIME,This is the description for a dimension,Renter Details,Signup and Recency
+112,renter__last_rental_id,Last Rental ID,renter__last_rental_id,CATEGORICAL,This is the description for a dimension,Renter Details,ID Fields
+113,renter__lifetime_credit_used,Lifetime Credit Used,renter__lifetime_credit_used,CATEGORICAL,This is the description for a dimension,Renter Details,
+114,renter__lifetime_rentals,Lifetime Rentals,renter__lifetime_rentals,CATEGORICAL,This is the description for a dimension,Renter Details,
+115,renter__lifetime_value,Lifetime Value,renter__lifetime_value,CATEGORICAL,This is the description for a dimension,Renter Details,
+116,renter__phone_number,Phone Number,renter__phone_number,CATEGORICAL,This is the description for a dimension,Renter Details,Details
+117,renter__renter_id,Renter ID,renter__renter_id,CATEGORICAL,This is the description for a dimension,Renter Details,ID Fields

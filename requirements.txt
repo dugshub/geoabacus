@@ -1,5 +1,10 @@
 flask
 python-dotenv
 flask-sqlalchemy
+flask-marshmallow
+marshmallow-sqlalchemy
 Flask-Migrate
 connexion[flask,swagger-ui]
+pandas
+lkml
+gunicorn
