@@ -9,8 +9,8 @@ import lkml
 
 
 class DimensionTags(db.Model):
-    name: Mapped[str] = db.Column(db.String, nullable=False, primary_key=True)
-    dimension_name: Mapped[str] = db.Column(db.String, db.ForeignKey('dimension.name'), nullable=False)
+    id: Mapped[int] = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
+    name: Mapped[str] = db.Column(db.String, db.ForeignKey('dimension.name'), nullable=False)
     primary_tag: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
     secondary_tag: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
     data_group: Mapped[[Optional[str]]] = db.Column(db.String, nullable=True)
@@ -30,6 +30,7 @@ class DimensionTagsSchema(ma.SQLAlchemyAutoSchema):
         model = DimensionTags
         load_instance = True
         sqla_session = db.session
+        include_fk = True
 
 
 class Dimension(db.Model):
@@ -62,7 +63,7 @@ class DimensionSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
-    dimension_tags = fields.Nested("DimensionTagsSchema", many=False)
+    dimensionTags = fields.Nested("DimensionTagsSchema", many=False)
 
 
 dimension_schema = DimensionSchema()

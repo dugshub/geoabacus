@@ -4,7 +4,7 @@ flask-sqlalchemy
 flask-marshmallow
 marshmallow-sqlalchemy
 Flask-Migrate
-connexion[flask,swagger-ui]
+connexion[flask,swagger-ui,uvicorn]
 pandas
 lkml
 gunicorn

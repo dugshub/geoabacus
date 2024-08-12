@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/abacus-badkend.iml" filepath="$PROJECT_DIR$/.idea/abacus-badkend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/abacus.iml" filepath="$PROJECT_DIR$/.idea/abacus.iml" />
     </modules>
   </component>
 </project>

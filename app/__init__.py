@@ -16,7 +16,7 @@ app = connex_app.app
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db,render_as_batch=True)
 
 from app import models
 
