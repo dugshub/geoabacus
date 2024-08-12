@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c73f60b7ead0
+Revision ID: 32600f2bda2b
 Revises: 
-Create Date: 2024-08-12 13:47:18.085604
+Create Date: 2024-08-12 18:32:04.959224
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c73f60b7ead0'
+revision = '32600f2bda2b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('label', sa.String(), nullable=True),
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('qualifiedName', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('name')
+    sa.PrimaryKeyConstraint('name', name=op.f('pk_dimension'))
     )
     op.create_table('dimension_tags',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -32,8 +32,10 @@ def upgrade():
     sa.Column('primary_tag', sa.String(), nullable=True),
     sa.Column('secondary_tag', sa.String(), nullable=True),
     sa.Column('data_group', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['name'], ['dimension.name'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.ForeignKeyConstraint(['name'], ['dimension.name'], name=op.f('fk_dimension_tags_name_dimension')),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_dimension_tags')),
+    sa.UniqueConstraint('name', name='fk_unique_constraint'),
+    sa.UniqueConstraint('name', name=op.f('uq_dimension_tags_name'))
     )
     # ### end Alembic commands ###
 

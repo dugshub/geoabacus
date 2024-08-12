@@ -2,6 +2,7 @@ from string import capwords
 from typing import Optional
 
 from marshmallow import fields, pre_load
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import Mapped
 
 from app import db, ma
@@ -9,10 +10,13 @@ from app import db, ma
 
 class DimensionTags(db.Model):
     id: Mapped[int] = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
-    name: Mapped[str] = db.Column(db.String, db.ForeignKey('dimension.name'), nullable=False)
+    name: Mapped[str] = db.Column(db.String, db.ForeignKey('dimension.name'), nullable=False,unique=True)
     primary_tag: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
     secondary_tag: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
     data_group: Mapped[[Optional[str]]] = db.Column(db.String, nullable=True)
+
+    __table_args__ = (UniqueConstraint("name",name="fk_unique_constraint"),)
+
 
     def __init__(self, name: str, primary_tag: Optional[str], secondary_tag: Optional[str], data_group: Optional[str]):
         self.name = name
