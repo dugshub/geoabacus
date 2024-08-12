@@ -1,5 +1,3 @@
-Update dim tags database to only include proper tags
-reflect changes  in front end
 build out metric classes and schema
 
 then build lookML conversion classes

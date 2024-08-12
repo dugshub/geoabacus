@@ -31,7 +31,8 @@ def create(dimension):
 def generate_lookml(fields):
     metrics = fields.get('metrics')
     dimensions = fields.get('dimensions')
-    dims = dimensions_schema.load(dimensions)
-    print(dims)
-
+    with app.app_context():
+        dims = dimensions_schema.load(dimensions)
+        db.session.add_all(dims)
+        db.session.commit()
     return metrics

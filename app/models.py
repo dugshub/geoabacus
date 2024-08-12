@@ -1,7 +1,7 @@
 from string import capwords
 from typing import Optional
 
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, backref
 from app import db, ma
 from marshmallow import fields
 from typing import List
@@ -15,6 +15,7 @@ class DimensionTags(db.Model):
     secondary_tag: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
     data_group: Mapped[[Optional[str]]] = db.Column(db.String, nullable=True)
 
+
     def __init__(self, name: str, primary_tag: Optional[str], secondary_tag: Optional[str], data_group: Optional[str]):
         self.name = name
         self.primary_tag = primary_tag
@@ -26,6 +27,7 @@ class DimensionTags(db.Model):
 
 
 class DimensionTagsSchema(ma.SQLAlchemyAutoSchema):
+
     class Meta:
         model = DimensionTags
         load_instance = True
@@ -40,18 +42,21 @@ class Dimension(db.Model):
     description: Mapped[Optional[str]] = None
     qualifiedName: Mapped[Optional[str]] = db.Column(db.String, nullable=True)
 
-    dimensionTags = db.relationship('DimensionTags', backref='dimension', uselist=False)
+    dimensionTags = db.relationship('DimensionTags', back_populates='dimension',cascade="all, delete-orphan")
 
     def __init__(self, name: str, type: str, label: Optional[str] = None, description: Optional[str] = None
-                 , qualifiedName: Optional[str] = None):
+                 , qualifiedName: Optional[str] = None, dimensionTags: DimensionTags = None):
         self.name = name
         self.type = type
         self.label = label or capwords(self.name.split('__')[-1].replace('_', ' '))
         self.description = description
         self.qualifiedName = qualifiedName
+        self.dimensionTags = dimensionTags
 
     def __repr__(self):
         return '<Dimension {}>'.format(self.name)
+
+DimensionTags.dimension = db.relationship('Dimension', back_populates='dimensionTags',single_parent='True')
 
 
 #
@@ -68,5 +73,5 @@ class DimensionSchema(ma.SQLAlchemyAutoSchema):
 
 dimension_schema = DimensionSchema()
 dimensions_schema = DimensionSchema(many=True)
-dimension_tag_schema = DimensionTagsSchema()
-dimension_tags_schema = DimensionTagsSchema(many=True)
+dimension_tag_schema = DimensionTagsSchema(exclude=("id",))
+dimension_tags_schema = DimensionTagsSchema(many=True, exclude=("id",))
