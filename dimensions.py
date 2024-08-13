@@ -36,5 +36,4 @@ def generate_lookml(fields):
     with db.session.no_autoflush:
         dims = dimensions_schema.load(dimensions)
         metriz = metrics_schema.load(metrics)
-
     return metrics_schema.dump(metriz)

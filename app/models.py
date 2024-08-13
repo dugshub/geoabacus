@@ -1,7 +1,7 @@
 from string import capwords
 from typing import Optional
 
-from marshmallow import fields, pre_load
+from marshmallow import fields, pre_load, INCLUDE, EXCLUDE
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import Mapped
 
@@ -128,6 +128,7 @@ MetricTags.metric = db.relationship('Metric', back_populates='metricTags', singl
 class MetricSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Metric
+        unknown = INCLUDE
         load_instance = True
         sqla_session = db.session
         include_relationships = True
