@@ -1,5 +1,6 @@
 from app import app, db
-from app.models import DimensionTags, Dimension, dimensions_schema, dimension_schema, dimension_tags_schema
+from app.models import DimensionTags, Dimension, dimensions_schema, dimension_schema, dimension_tags_schema, \
+    metrics_schema
 from flask import abort
 
 
@@ -31,7 +32,9 @@ def create(dimension):
 def generate_lookml(fields):
     metrics = fields.get('metrics')
     dimensions = fields.get('dimensions')
+
     with db.session.no_autoflush:
         dims = dimensions_schema.load(dimensions)
+        metriz = metrics_schema.load(metrics)
 
-    return metrics
+    return metrics_schema.dump(metriz)
