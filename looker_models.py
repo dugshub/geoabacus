@@ -19,9 +19,19 @@ def to_looker_dimension(dimension: Dimension):
         "label": dimension.label,
         "description": dimension.description or "",
         "sql": f"${{TABLE}}.{dimension.name}",
-        "name": dimension.name
-
+        "name": dimension.name,
     }
+    try:
+        if dimension.dimensionTags.primary_tag:
+            dim.update({"view_label": dimension.dimensionTags.primary_tag})
+    except:
+        pass
+
+    try:
+        if dimension.dimensionTags.secondary_tags:
+           dim.update({"group_label": dimension.dimensionTags.secondary_tag})
+    except:
+        pass
 
     return dim
 
@@ -49,6 +59,10 @@ def to_looker_measure(metric: Metric):
 
 
 def convert_metric_type(metric):
+    # if hasattr(metric, 'measures'):
+    #     print(metric.measures)
+    if hasattr(metric, 'typeParams'):
+        print(metric.typeParams)
     properties = []
 
     if metric.type == 'SIMPLE':

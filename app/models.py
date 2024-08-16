@@ -83,7 +83,7 @@ class MetricTags(db.Model):
 
     __table_args__ = (UniqueConstraint("name", name="fk_unique_constraint_metric"),)
 
-    def __init__(self, name: str, metric_type: Optional[str], metric_category: Optional[str],group: Optional[str]):
+    def __init__(self, name: str, metric_type: Optional[str], metric_category: Optional[str], group: Optional[str]):
         self.name = name
         self.metric_type = metric_type
         self.metric_category = metric_category
@@ -95,6 +95,7 @@ class MetricTags(db.Model):
 
 class MetricTagsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
+        unknown = INCLUDE
         model = MetricTags
         load_instance = True
         sqla_session = db.session
@@ -144,7 +145,6 @@ class MetricSchema(ma.SQLAlchemyAutoSchema):
 
         return data
 
-
     metricTags = fields.Nested("MetricTagsSchema", many=False, allow_none=True)
 
 
@@ -154,6 +154,6 @@ dimension_tag_schema = DimensionTagsSchema(exclude=("id",))
 dimension_tags_schema = DimensionTagsSchema(many=True, exclude=("id",))
 
 metric_schema = MetricSchema()
-metrics_schema = MetricSchema(many=True)
+metrics_schema = MetricSchema(many=True, unknown=INCLUDE)
 metric_tag_schema = MetricTagsSchema(exclude=("id",))
 metric_tags_schema = MetricTagsSchema(many=True, exclude=("id",))

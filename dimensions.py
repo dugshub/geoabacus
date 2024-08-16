@@ -50,7 +50,7 @@ def generate_lookml(fields):
     view = {"name": tablename}
 
     view.update(derived_table)
-    view.update({"measures": [lm.to_looker(metric) for metric in metrics]})
+    #view.update({"measures": [lm.to_looker(metric) for metric in metrics]})
     view.update({"dimensions": [lm.to_looker(dimension) for dimension in dimensions]})
 
     view = {"view": view}
