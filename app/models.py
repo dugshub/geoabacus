@@ -31,6 +31,7 @@ class ShapefileSchema(ma.SQLAlchemyAutoSchema):
 
 
 
+
 def from_geojson(wof):
     bbox = wof.bbox
     properties = wof.properties
