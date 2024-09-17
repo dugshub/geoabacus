@@ -44,7 +44,12 @@ with app.app_context():
     def load_spatialite(dbapi_conn, connection_record):
         # From https://geoalchemy-2.readthedocs.io/en/latest/spatialite_tutorial.html
         dbapi_conn.enable_load_extension(True)
-        dbapi_conn.load_extension('mod_spatialite.dylib')
+        try:
+            dbapi_conn.load_extension('mod_spatialite')
+        except:
+            pass
+        finally:
+            dbapi_conn.load_extension('mod_spatialite.dylib')
 
 
 from app import models
