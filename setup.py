@@ -2,14 +2,19 @@ import bz2
 import json
 import os
 import sqlite3
-from pathlib import Path
+from sqlalchemy import text
+
 import dotenv
 import requests
+
 from config import basedir
+from app import app,db
 
 dotenv.load_dotenv()
 
 wof_dir = f'{basedir}/{os.environ.get("WOF_DB_DIRECTORY")}'
+
+
 def get_wof_download_links():
     download_url = os.environ.get('WOF_DOWNLOAD_LINK')
     countries = json.loads(os.environ.get('WOF_COUNTRIES'))
@@ -70,10 +75,17 @@ def create_wof_lookup():
     os.rename(largest_db, f'{basedir}/{os.environ.get("WOF_SQLITE_PATH")}')
     print(f'{basedir}/{os.environ.get("WOF_SQLITE_PATH")}')
 
+def initialize_db():
+    with app.app_context():
+        query = text('SELECT InitSpatialMetaData();')
+        db.session.execute(query)
+        db.drop_all()
+
 def main():
-    get_wof_dbs()
-    create_wof_lookup()
+    #get_wof_dbs()
+    #create_wof_lookup()
+    initialize_db()
+
 
 if __name__ == '__main__':
     main()
-

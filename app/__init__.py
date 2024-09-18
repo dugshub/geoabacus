@@ -51,7 +51,7 @@ with app.app_context():
     def load_spatialite(dbapi_conn, connection_record):
         # From https://geoalchemvy-2.readthedocs.io/en/latest/spatialite_tutorial.html
         dbapi_conn.enable_load_extension(True)
-        dbapi_conn.load_extension(mod_spatialite) 
+        dbapi_conn.load_extension(mod_spatialite)
 
 
 
