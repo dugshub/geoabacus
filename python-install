@@ -1,6 +1,0 @@
-PYTHON_CONFIGURE_OPTS="--enable-loadable-sqlite-extensions --enable-optimizations --with-openssl=/opt/homebrew/opt/openssl@3" \
-LDFLAGS="-L/opt/homebrew/opt/sqlite3/lib" \
-    CPPFLAGS="-I/opt/homebrew/opt/sqlite3/include" \
-pyenv install 3.12
-
-#This will install the correct sqlite version from homebrew

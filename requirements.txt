@@ -14,7 +14,7 @@ alembic~=1.13.2
 marshmallow_geojson~=0.5.0
 geojson
 pandas
-
+dotenv
 
 GeoAlchemy2~=0.15.2
 spatialite
