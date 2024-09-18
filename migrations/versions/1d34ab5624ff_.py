@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4917f1d8a2d6
+Revision ID: 1d34ab5624ff
 Revises: 
-Create Date: 2024-09-18 14:14:22.429998
+Create Date: 2024-09-18 14:19:03.124219
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from geoalchemy2 import Geometry
 
 # revision identifiers, used by Alembic.
-revision = '4917f1d8a2d6'
+revision = '1d34ab5624ff'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('placetype', sa.String(), nullable=False),
     sa.Column('parent', sa.Integer(), nullable=False),
     sa.Column('geojson', sa.String(), nullable=False),
-    sa.Column('geometry', Geometry(geometry_type='NONE', spatial_index=False, from_text='ST_GeomFromEWKT', name='geometry'), nullable=True),
+    sa.Column('geometry', Geometry(geometry_type=None, spatial_index=False, from_text='ST_GeomFromEWKT', name='geometry'), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('shapefile', schema=None) as batch_op:

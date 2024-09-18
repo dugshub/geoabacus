@@ -20,7 +20,7 @@ class Shapefile(db.Model):
     parent: Mapped[int]
     geojson: Mapped[str]
     ##bbox: Mapped[str] = mapped_column()  #: Mapped[list] = mapped_column(nullable=False)
-    geometry = mapped_column(Geometry(geometry_type='NONE'))
+    geometry = mapped_column(Geometry(geometry_type='GEOMETRY'))
 
 class ShapefileSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
