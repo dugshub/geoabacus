@@ -6,8 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, event
 import geoalchemy2
 from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
+from geoalchemy2 import alembic_helpers
 
 from config import Config
+import os
 
 connex_app = FlaskApp(__name__)
 
@@ -36,20 +38,21 @@ class Base(DeclarativeBase, MappedAsDataclass):
 ma = Marshmallow(app)
 db = SQLAlchemy(app, metadata=metadata,model_class=Base)
 
-migrate = Migrate(app, db)
+migrate = Migrate(
+            app=app, 
+            db=db,
+        )
+
+mod_spatialite = os.environ.get("SPATIALITE_LIBRARY_PATH") or 'mod_spatialite'
 
 
 with app.app_context():
     @event.listens_for(db.engine, "connect")
     def load_spatialite(dbapi_conn, connection_record):
-        # From https://geoalchemy-2.readthedocs.io/en/latest/spatialite_tutorial.html
+        # From https://geoalchemvy-2.readthedocs.io/en/latest/spatialite_tutorial.html
         dbapi_conn.enable_load_extension(True)
-        try:
-            dbapi_conn.load_extension('mod_spatialite')
-        except:
-            pass
-        finally:
-            dbapi_conn.load_extension('mod_spatialite.dylib')
+        dbapi_conn.load_extension(mod_spatialite) 
+
 
 
 from app import models

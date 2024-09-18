@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-mod-spatialite
 COPY app app
 COPY migrations migrations
-COPY shapes.py config.py setup.py boot.sh wof.db ./
+COPY shapes.py config.py setup.py boot.sh ./
 RUN chmod a+x boot.sh
 
 ENV FLASK_APP=shapes.py
