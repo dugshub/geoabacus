@@ -121,6 +121,7 @@ def get_related_placetypes(wof_ids=[None],placetypes=['neighbourhood']):
                             id in {wof_ids}
                 ),
 
+
                 hierarchy as (
                     select * from ancestors 
                     left join wof_ids on wof_ids.id = ancestors.id
