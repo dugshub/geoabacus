@@ -79,7 +79,6 @@ def initialize_db():
     with app.app_context():
         query = text('SELECT InitSpatialMetaData();')
         db.session.execute(query)
-        db.drop_all()
 
 def main():
     #get_wof_dbs()
