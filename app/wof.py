@@ -1,5 +1,6 @@
 import os
 
+import geojson
 import sqlalchemy as sa
 from sqlalchemy import text
 
@@ -7,9 +8,10 @@ wofdb = os.environ.get("WOF_SQLITE_PATH")
 engine = sa.create_engine(f'sqlite:///{wofdb}')
 
 
-def get_geojson(query=None):
+def get_by_placetype(placetype_filter=('country','region','county')):
     """
-    Returns a list of sqlalchemy.engine.row.RowMapping items of WhosOnFirst geojson blobs.
+    Returns a list of sqlalchemy.engine.row.RowMapping items of WhosOnFirst geojson blobs using placetype as a filter.
+    Only pulls locations marked as 'is_current'
 
     Args:
         None - tbd
@@ -18,37 +20,29 @@ def get_geojson(query=None):
         list: Objects of WhosOnFirst data. Can be indexed as a dictionary or through attribute notation.
     """
     with engine.connect() as connection:
-        query = query or text(
-            """
-            with wof_ids as (
-                select * from spr
-                    where
-                        placetype = "locality" and
-                        name = "Toronto" and
-                        country = "CA" and
-                        is_current = 1
+        query = text(
+            f"""
+            with
+            dims as (
+                select id from spr
+                         where placetype in {placetype_filter} and
+                               is_current
             ),
+        
+            shapes as (
+                select
+                    geojson.body as geojson_data
+                from geojson
+                where id in (select * from dims) and
+                      not is_alt
+            )
 
-                shapes as (
-                    select * from geojson
-                )
-
-            select  
-                wof_ids.id,
-                parent_id as parent,
-                name,
-                placetype,
-                country,
-                body as geojson,
-                is_current,
-                is_alt
-            from wof_ids
-            left join shapes on wof_ids.id = shapes.id
-            where not shapes.is_alt 
+            select distinct * from shapes
          """
         )
-        result = connection.execute(query)
-        return [row._mapping for row in result.fetchall()]
+        result = connection.scalars(query).all()
+        row = [geojson.loads(row) for row in result]
+        return row
 
 
 def from_ids(wof_ids=[None]):
@@ -68,43 +62,27 @@ def from_ids(wof_ids=[None]):
         query = text(
             f"""
                 with wof_ids as (
-                    select * from spr
+                    select id from spr
                         where
                             is_current = 1 and 
                             id in {wof_ids}
                 ),
-                
-                hierarchy as (
-                    select * from ancestors
-                ),
-    
                 shapes as (
                     select * from geojson
                 )
-    
                 select  
-                    wof_ids.id,
-                    parent_id as parent,
-                    name,
-                    placetype,
-                    country,
-                    body as geojson,
-                    is_current,
-                    is_alt
-                from wof_ids
-                left join shapes on wof_ids.id = shapes.id
-                where not shapes.is_alt 
+                    body as geojson_data
+                from shapes
+                where not shapes.is_alt and
+                shapes.id in (select * from wof_ids)
              """
         )
-        result = connection.execute(query)
-        connection.close()
-        return [row._mapping for row in result.fetchall()]
-
+        result = connection.scalars(query).all()
+        return [geojson.loads(row) for row in result]
 
 def get_related_placetypes(wof_ids=(101735835, ''), placetypes=('neighbourhood', '')):
     """
-    Returns a list of sqlalchemy.engine.row.RowMapping items of WhosOnFirst geojson blobs from a list of
-    WhosOnFirst ids. This function will pull all associated placetypes (
+    Returns a list of WhosOnFirst geojson objects.
 
     Args:
         List of WhosOnFirst ids.
@@ -167,4 +145,5 @@ def get_related_placetypes(wof_ids=(101735835, ''), placetypes=('neighbourhood',
         )
         result = connection.execute(query)
         connection.close()
-        return [row._mapping for row in result.fetchall()]
+        row = [geojson.loads(row._mapping.geojson_data) for row in result.fetchall()]
+        return row
