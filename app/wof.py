@@ -5,10 +5,10 @@ import sqlalchemy as sa
 from sqlalchemy import text
 
 wofdb = os.environ.get("WOF_SQLITE_PATH")
-engine = sa.create_engine(f'sqlite:///{wofdb}')
 
 
 def get_by_placetype(placetype_filter=('country','region','county')):
+
     """
     Returns a list of sqlalchemy.engine.row.RowMapping items of WhosOnFirst geojson blobs using placetype as a filter.
     Only pulls locations marked as 'is_current'
@@ -19,6 +19,8 @@ def get_by_placetype(placetype_filter=('country','region','county')):
     Returns:
         list: Objects of WhosOnFirst data. Can be indexed as a dictionary or through attribute notation.
     """
+
+    engine = sa.create_engine(f'sqlite:///{wofdb}')
     with engine.connect() as connection:
         query = text(
             f"""
@@ -46,6 +48,7 @@ def get_by_placetype(placetype_filter=('country','region','county')):
 
 
 def from_ids(wof_ids=[None]):
+
     """
     Returns a list of sqlalchemy.engine.row.RowMapping items of WhosOnFirst geojson blobs from a list of
     WhosOnFirst ids.
@@ -57,6 +60,7 @@ def from_ids(wof_ids=[None]):
         list: Objects of WhosOnFirst data. Can be indexed as a dictionary or through attribute notation.
     """
 
+    engine = sa.create_engine(f'sqlite:///{wofdb}')
     wof_ids = wof_ids or []
     with engine.connect() as connection:
         query = text(
@@ -90,7 +94,7 @@ def get_related_placetypes(wof_ids=(101735835, ''), placetypes=('neighbourhood',
     Returns:
         list: Objects of WhosOnFirst data. Can be indexed as a dictionary or through attribute notation.
     """
-
+    engine = sa.create_engine(f'sqlite:///{wofdb}')
     with engine.connect() as connection:
         query = text(
             f"""
