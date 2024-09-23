@@ -36,7 +36,7 @@ class Base(DeclarativeBase, MappedAsDataclass):
 
 
 ma = Marshmallow(app)
-db = SQLAlchemy(app, metadata=metadata,model_class=Base)
+db = SQLAlchemy(app, metadata=metadata ,model_class=Base)
 
 migrate = Migrate(
             app=app, 

@@ -10,9 +10,10 @@ from marshmallow_sqlalchemy import ModelConverter
 from marshmallow_sqlalchemy.fields import Nested
 from shapely.geometry import shape
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app import db, ma
+from config import placetype_hierarchy
 
 
 class GeoConverter(ModelConverter):
@@ -53,7 +54,10 @@ class ShapefileSchema(ma.SQLAlchemyAutoSchema):
 class Neighbourhood(Shapefile):
     id: Mapped[int] = mapped_column(ForeignKey("shapefile.id"), primary_key=True)
     name: Mapped[str]
+    hierarchy_parent_id: Mapped[int] = mapped_column(ForeignKey("locality.id"), nullable=True)
 
+    locality = relationship('Locality', back_populates='neighbourhoods',
+                            foreign_keys='Neighbourhood.hierarchy_parent_id')
     __mapper_args__ = {
         "polymorphic_on": "placetype",
         "polymorphic_identity": "neighbourhood",
@@ -63,6 +67,13 @@ class Neighbourhood(Shapefile):
 class Locality(Shapefile):
     id: Mapped[int] = mapped_column(ForeignKey("shapefile.id"), primary_key=True)
     name: Mapped[str]
+    hierarchy_parent_id: Mapped[int] = mapped_column(ForeignKey("region.id"), nullable=True)
+    region = relationship('Region', back_populates='localities',
+                            foreign_keys='Locality.hierarchy_parent_id')
+
+    neighbourhoods = relationship("Neighbourhood", back_populates="locality",
+                                  foreign_keys='Neighbourhood.hierarchy_parent_id')#, lazy='selectin')
+
 
     __mapper_args__ = {
         "polymorphic_on": "placetype",
@@ -83,7 +94,12 @@ class County(Shapefile):
 class Region(Shapefile):
     id: Mapped[int] = mapped_column(ForeignKey("shapefile.id"), primary_key=True)
     name: Mapped[str]
+    hierarchy_parent_id: Mapped[int] = mapped_column(ForeignKey("country.id"), nullable=True)
+    country = relationship('Country', back_populates='regions',
+                            foreign_keys='Region.hierarchy_parent_id')
 
+    localities = relationship("Locality", back_populates="region",
+                                  foreign_keys='Locality.hierarchy_parent_id')
     __mapper_args__ = {
         "polymorphic_on": "placetype",
         "polymorphic_identity": "region",
@@ -94,6 +110,8 @@ class Country(Shapefile):
     id: Mapped[int] = mapped_column(ForeignKey("shapefile.id"), primary_key=True)
     name: Mapped[str]
 
+    regions = relationship("Region", back_populates="country",
+                                  foreign_keys='Region.hierarchy_parent_id')
     __mapper_args__ = {
         "polymorphic_on": "placetype",
         "polymorphic_identity": "country",
@@ -140,6 +158,7 @@ class MyFeatureCollectionSchema(FeatureCollectionSchema):
         metadata=dict(example=GEOJSON_FEATURE_COLLECTION["features"]),
     )
 
+
 geojson_schema = MyGeoJSONSchema()
 property_schema = ShapePropertySchema()
 
@@ -153,6 +172,20 @@ def createShapefile(shapefile):
     placetype = shapefile.properties.get('wof:placetype')
     bbox = "".join(str(shapefile.bbox))
     geometry = shape(shapefile.geometry).wkt
+    hierarchy = shapefile.properties.get('wof:hierarchy')[0]  # by deafault, we use the first hierarchy.
+
+    # The following sets the 'parent layer' for the placetype in question. This is based on the hierarchy defined
+    # in the config and .env file. This definition is necessary as these shapes do not have a defined hierchial order
+    # (there are many correct answers).
+
+    # The function finds the current layer eg. Neighbourhood in the hierarchy_tuple and takes the prior value in the
+    # list. The list is ordered from top to bottom wrt lineage. (eg. Country = idx 0)
+
+    if placetype in placetype_hierarchy and placetype_hierarchy.index(placetype) != 0:
+        parent_layer = min(
+            placetype_hierarchy[placetype_hierarchy.index(shapelayer) - 1] for shapelayer in placetype_hierarchy if
+            shapelayer == placetype)
+        parent_id = min(val for (key, val) in hierarchy.items() if parent_layer in key)
 
     match placetype:
         case 'locality':
@@ -161,7 +194,8 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
-                name=shapefile.properties.get('wof:name')
+                name=shapefile.properties.get('wof:name'),
+                hierarchy_parent_id=parent_id,
             )
 
         case 'neighbourhood':
@@ -170,7 +204,8 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
-                name=shapefile.properties.get('wof:name')
+                name=shapefile.properties.get('wof:name'),
+                hierarchy_parent_id=parent_id,
             )
         case 'county':
             return County(
@@ -186,7 +221,8 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
-                name=shapefile.properties.get('wof:name')
+                name=shapefile.properties.get('wof:name'),
+                hierarchy_parent_id=parent_id,
             )
         case 'country':
             return Country(
@@ -196,6 +232,7 @@ def createShapefile(shapefile):
                 geometry=geometry,
                 name=shapefile.properties.get('wof:name')
             )
+
 
 feature_collection = MyFeatureCollectionSchema()
 shapefile_schema = ShapefileSchema()

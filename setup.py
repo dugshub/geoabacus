@@ -91,7 +91,7 @@ def initialize_db():
     subprocess.run(["flask db init"], shell=True)
 
     print('Replacing default env.py migration script with GeoAlchemy2 compatible version')
-    shutil.copyfile(f'env_template.py', f'migrations/env.py')
+    shutil.copyfile(f'setup/env_template.py', f'migrations/env.py')
 
     with app.app_context():
         print('Initializing geospatial capabilities on database')
@@ -162,7 +162,7 @@ def load_database():
     _load_related_neighbourhoods()
     lap2 = time.time()
     print(f'Completed in {'%.2f' % (lap2 - start_time)} seconds')
-    _load_placetypes(filtered_placetypes=('country', 'region', 'county'))
+    _load_placetypes(filtered_placetypes=('country', 'region','county'))
     print(f'Completed in {'%.2f' % (time.time() - lap2)} seconds')
     print(f'Database loading complete! Total time: {'%.2f' % (time.time() - start_time)}')
 
@@ -202,4 +202,5 @@ def main():
 
 
 if __name__ == '__main__':
+    clean_install()
     main()

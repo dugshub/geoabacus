@@ -7,19 +7,12 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-mod-spatialite
 COPY app app
 COPY migrations migrations
-COPY config.py setup.py env_template.py locality_configs.yml boot.sh teststuff.py ./
+COPY setup setup
+COPY tests tests
+COPY config.py setup.py locality_configs.yml boot.sh ./
 COPY  wof_datasets/wof.db  wof_datasets/wof.db
 RUN chmod a+x boot.sh
 
-ENV FLASK_APP=shapes.py
-ENV DATABASE_NAME=abacus
-ENV SQLITE_DATABASE_PATH=/${DATABASE_NAME}.db
-ENV WHOSONFIRST_PATH=/Users/dug/projects/WhosOnFirstData/whosonfirst-data-admin-ca
-ENV MAPBOX_MAP_ID=""
-ENV WOF_COUNTRIES=["CA","US"]
-ENV WOF_DOWNLOAD_LINK=https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-%s-latest.db.bz2
-ENV WOF_DB_DIRECTORY=""
-ENV WOF_SQLITE_PATH=${WOF_DB_DIRECTORY}wof.db
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
