@@ -1,13 +1,18 @@
+import geojson
+from geoalchemy2.shape import to_shape
 from geoalchemy2.types import Geometry
 from marshmallow import EXCLUDE
 from marshmallow import fields
+from marshmallow.fields import List
+from marshmallow_geojson import PropertiesSchema, FeatureSchema, GeoJSONSchema, FeatureCollectionSchema
+from marshmallow_geojson.examples import GEOJSON_FEATURE_COLLECTION
 from marshmallow_sqlalchemy import ModelConverter
+from marshmallow_sqlalchemy.fields import Nested
 from shapely.geometry import shape
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app import db, ma
-import geojson
 
 
 class GeoConverter(ModelConverter):
@@ -26,6 +31,15 @@ class Shapefile(db.Model):
     __mapper_args__ = {
         "polymorphic_on": "placetype",
     }
+
+    def to_geojson(self):
+        properties = {
+            "id": self.id,
+            "name": self.name,
+            "placetype": self.placetype,
+        }
+
+        return geojson.Feature(geometry=to_shape(self.geometry), properties=properties)
 
 
 class ShapefileSchema(ma.SQLAlchemyAutoSchema):
@@ -86,6 +100,54 @@ class Country(Shapefile):
     }
 
 
+class ShapePropertySchema(PropertiesSchema):
+    name = fields.Str()
+    id = fields.Integer()
+    placetype = fields.Str()
+
+    class Meta:
+        unknown = EXCLUDE
+
+
+class ShapeFeatureSchema(FeatureSchema):
+    type = fields.Str(default="Feature")
+    properties = Nested(
+        nested=ShapePropertySchema,
+        required=True,
+    )
+
+    class Meta:
+        unknown = EXCLUDE
+
+
+class MyGeoJSONSchema(GeoJSONSchema):
+    feature_schema = ShapeFeatureSchema(many=True)
+
+
+#
+# class GeoJSONSchema(GeoJSONSchema, ma.SQLAlchemyAutoSchema):
+#     class Meta:
+#         unknown = INCLUDE
+#         feature_schema = FeatureSchema
+#
+#
+class MyFeatureCollectionSchema(FeatureCollectionSchema):
+    type = fields.Str(default="FeatureCollection")
+
+    features = List(
+        Nested(ShapeFeatureSchema()),
+        required=True,
+        metadata=dict(example=GEOJSON_FEATURE_COLLECTION["features"]),
+    )
+
+geojson_schema = MyGeoJSONSchema()
+property_schema = ShapePropertySchema()
+
+feature_schema = ShapeFeatureSchema()
+
+
+# features_schema = FeatureSchema(many=True)
+
 def createShapefile(shapefile):
     id = shapefile.id
     placetype = shapefile.properties.get('wof:placetype')
@@ -135,6 +197,6 @@ def createShapefile(shapefile):
                 name=shapefile.properties.get('wof:name')
             )
 
-
+feature_collection = MyFeatureCollectionSchema()
 shapefile_schema = ShapefileSchema()
 shapefiles_schema = ShapefileSchema(many=True)

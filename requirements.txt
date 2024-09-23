@@ -18,3 +18,4 @@ GeoAlchemy2~=0.15.2
 spatialite
 shapely
 requests~=2.32.3
+marshmallow_geojson
