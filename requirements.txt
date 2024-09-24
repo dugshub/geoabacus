@@ -1,10 +1,21 @@
-flask
-python-dotenv
+## Standard Framework Requirements ##
+Flask~=3.0.3
+SQLAlchemy~=2.0.32
 flask-sqlalchemy
 flask-marshmallow
 marshmallow-sqlalchemy
 Flask-Migrate
-connexion[flask,swagger-ui,uvicorn]
+python-dotenv~=1.0.1
+connexion[flask,marshmallow,uvicorn,swagger-ui]~=3.1.0
+marshmallow~=3.22.0
+alembic~=1.13.2
+
+## App Specific Requirements ##
+marshmallow_geojson~=0.5.0
+geojson
 pandas
-lkml
-gunicorn
+GeoAlchemy2~=0.15.2
+spatialite
+shapely
+requests~=2.32.3
+marshmallow_geojson

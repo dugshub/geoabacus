@@ -1,18 +1,19 @@
+from connexion import FlaskApp
 from flask import render_template
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from connexion import FlaskApp
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, event
+import geoalchemy2
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
+from geoalchemy2 import alembic_helpers
 
-from config import Config
+from config import Config, basedir
+import os
 
-def create_app():
-    app = FlaskApp(__name__)
-    app.add_api("swagger.yml", base_path="/api")
-    return app
+connex_app = FlaskApp(__name__)
+connex_app.add_api(f"{basedir}/swagger.yml")
 
-connex_app = create_app()
 app = connex_app.app
 app.config.from_object(Config)
 convention = {
@@ -20,16 +21,40 @@ convention = {
     "uq": "uq_%(table_name)s_%(column_0_name)s",
     "ck": "ck_%(table_name)s_%(constraint_name)s",
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s"
+    "pk": "pk_%(table_name)s",
 }
+
 
 metadata = MetaData(naming_convention=convention)
 
+
+def registry(type_annotation_map):
+    pass
+
+
+class Base(DeclarativeBase, MappedAsDataclass):
+    """Base class for SQLAlchemy models"""
+
+
 ma = Marshmallow(app)
-db = SQLAlchemy(app,metadata=metadata)
+db = SQLAlchemy(app, metadata=metadata ,model_class=Base)
+
+migrate = Migrate(
+            app=app, 
+            db=db,
+        )
+
+mod_spatialite = os.environ.get("SPATIALITE_LIBRARY_PATH") or 'mod_spatialite'
 
 
-migrate = Migrate(app, db,render_as_batch=True)
+with app.app_context():
+    @event.listens_for(db.engine, "connect")
+    def load_spatialite(dbapi_conn, connection_record):
+        # From https://geoalchemvy-2.readthedocs.io/en/latest/spatialite_tutorial.html
+        dbapi_conn.enable_load_extension(True)
+        dbapi_conn.load_extension(mod_spatialite)
+
+
 
 from app import models
 
