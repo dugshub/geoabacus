@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for neighbourhood in neighbourhoods %}
+    <div><p>{{ neighbourhood }} </p></div>
+    {% endfor %}
+{% endblock %}

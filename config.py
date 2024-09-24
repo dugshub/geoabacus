@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 ######
 basedir = Path(__file__).parent.absolute()
 load_dotenv(dotenv_path=".env_dev")
-print(f'sqlite:///{basedir}/{os.environ.get('SQLITE_DATABASE_PATH')}')
 
 placetype_hierarchy = ('country','region','locality','neighbourhood')
 ######

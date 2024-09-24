@@ -198,9 +198,9 @@ def main():
         clean_install()
 
     else:
+        print('Database found - skipping rebuild step. Performing db upgrade.')
         subprocess.run(["flask db upgrade"], shell=True)
 
 
 if __name__ == '__main__':
-    clean_install()
     main()

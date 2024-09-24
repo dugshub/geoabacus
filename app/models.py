@@ -163,9 +163,7 @@ geojson_schema = MyGeoJSONSchema()
 property_schema = ShapePropertySchema()
 
 feature_schema = ShapeFeatureSchema()
-
-
-# features_schema = FeatureSchema(many=True)
+features_schema = FeatureSchema(many=True)
 
 def createShapefile(shapefile):
     id = shapefile.id
@@ -235,5 +233,6 @@ def createShapefile(shapefile):
 
 
 feature_collection = MyFeatureCollectionSchema()
+features_collection = MyFeatureCollectionSchema(many=True)
 shapefile_schema = ShapefileSchema()
 shapefiles_schema = ShapefileSchema(many=True)

@@ -10,7 +10,6 @@ COPY migrations migrations
 COPY setup setup
 COPY tests tests
 COPY config.py setup.py locality_configs.yml boot.sh ./
-COPY  wof_datasets/wof.db  wof_datasets/wof.db
 RUN chmod a+x boot.sh
 
 
