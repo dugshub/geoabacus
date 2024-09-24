@@ -2,7 +2,7 @@ from flask import render_template
 from sqlalchemy import select
 
 from app import app, db
-from app.models import Neighbourhood, Locality, feature_schema, feature_collection
+from app.models import Neighbourhood, Locality, feature_schema, feature_collection,placetype_schema,placetypes_schema
 
 
 def geojson_from_placetype_list(placetype_list=[],string=True):
@@ -11,7 +11,7 @@ def geojson_from_placetype_list(placetype_list=[],string=True):
 
         feature_set = {"features": placetype_dicts}
         if string:
-            geojson_export = feature_collection.dumps(feature_set)
+            geojson_export = feature_collection.dump(feature_set)
         else:
             geojson_export = feature_collection.dump(feature_set)
 
@@ -31,3 +31,8 @@ def get_all_neighbourhoods(string=True):
         neighbourhoods = geojson_from_placetype_list(neighbourhoods,string)
 
         return neighbourhoods
+
+def get_all_localities(string=True):
+    with app.app_context():
+        localities = db.session.scalars(select(Locality)).all()
+        return placetypes_schema.dump(localities)

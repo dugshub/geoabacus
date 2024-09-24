@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: "Geoabacus Backend"
+  description: "API for interaction with Geoabacus Shapefile Objects"
+  version: "1.0.0"
+
+servers:
+  - url: "/geometry"
+
+
+components:
+
+  parameters:
+
+    locality_id:
+      name: "locality_id"
+      description: "WoF ID representing a Locality"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+    neighbourhood_id:
+      name: "neighbourhood_id"
+      description: "WoF ID representing a Neighbourhood"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+paths:
+  /localities:
+    get:
+      operationId: "routes.get_all_localities"
+      tags:
+        - Localities
+      summary: "Get objects objects for all localities"
+      responses:
+        "200":
+          description: "Successfully read localities"
+  /neighbourhoods/:
+    get:
+      operationId: "routes.get_all_neighbourhoods"
+      tags:
+        - Neighbourhoods
+      summary: "Get Geojson objects for all neighbourhoods"
+      responses:
+        "200":
+          description: "Successfully read neighbourhoods"
+  /neighbourhoods/{locality_id}:
+    get:
+      operationId: "routes.get_neighbourhoods_from_locality"
+      tags:
+        - Neighbourhoods
+      summary: "Get Geojson objects for all neighbourhoods associated with a locality_id"
+      parameters:
+        - $ref: "#/components/parameters/locality_id"
+      responses:
+        "200":
+          description: "Successfully read neighbourhoods"
+

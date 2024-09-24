@@ -69,11 +69,10 @@ class Locality(Shapefile):
     name: Mapped[str]
     hierarchy_parent_id: Mapped[int] = mapped_column(ForeignKey("region.id"), nullable=True)
     region = relationship('Region', back_populates='localities',
-                            foreign_keys='Locality.hierarchy_parent_id')
+                          foreign_keys='Locality.hierarchy_parent_id')
 
     neighbourhoods = relationship("Neighbourhood", back_populates="locality",
-                                  foreign_keys='Neighbourhood.hierarchy_parent_id')#, lazy='selectin')
-
+                                  foreign_keys='Neighbourhood.hierarchy_parent_id')  # , lazy='selectin')
 
     __mapper_args__ = {
         "polymorphic_on": "placetype",
@@ -96,10 +95,10 @@ class Region(Shapefile):
     name: Mapped[str]
     hierarchy_parent_id: Mapped[int] = mapped_column(ForeignKey("country.id"), nullable=True)
     country = relationship('Country', back_populates='regions',
-                            foreign_keys='Region.hierarchy_parent_id')
+                           foreign_keys='Region.hierarchy_parent_id')
 
     localities = relationship("Locality", back_populates="region",
-                                  foreign_keys='Locality.hierarchy_parent_id')
+                              foreign_keys='Locality.hierarchy_parent_id')
     __mapper_args__ = {
         "polymorphic_on": "placetype",
         "polymorphic_identity": "region",
@@ -111,7 +110,7 @@ class Country(Shapefile):
     name: Mapped[str]
 
     regions = relationship("Region", back_populates="country",
-                                  foreign_keys='Region.hierarchy_parent_id')
+                           foreign_keys='Region.hierarchy_parent_id')
     __mapper_args__ = {
         "polymorphic_on": "placetype",
         "polymorphic_identity": "country",
@@ -164,6 +163,7 @@ property_schema = ShapePropertySchema()
 
 feature_schema = ShapeFeatureSchema()
 features_schema = FeatureSchema(many=True)
+
 
 def createShapefile(shapefile):
     id = shapefile.id
@@ -232,7 +232,11 @@ def createShapefile(shapefile):
             )
 
 
+
 feature_collection = MyFeatureCollectionSchema()
 features_collection = MyFeatureCollectionSchema(many=True)
 shapefile_schema = ShapefileSchema()
 shapefiles_schema = ShapefileSchema(many=True)
+
+placetype_schema = ShapePropertySchema()
+placetypes_schema = ShapePropertySchema(many=True)

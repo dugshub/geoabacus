@@ -8,10 +8,11 @@ import geoalchemy2
 from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 from geoalchemy2 import alembic_helpers
 
-from config import Config
+from config import Config, basedir
 import os
 
 connex_app = FlaskApp(__name__)
+connex_app.add_api(f"{basedir}/swagger.yml")
 
 app = connex_app.app
 app.config.from_object(Config)

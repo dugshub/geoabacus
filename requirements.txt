@@ -6,7 +6,7 @@ flask-marshmallow
 marshmallow-sqlalchemy
 Flask-Migrate
 python-dotenv~=1.0.1
-connexion[flask,marshmallow,uvicorn]~=3.1.0
+connexion[flask,marshmallow,uvicorn,swagger-ui]~=3.1.0
 marshmallow~=3.22.0
 alembic~=1.13.2
 
