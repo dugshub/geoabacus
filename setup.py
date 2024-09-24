@@ -10,6 +10,7 @@ import dotenv
 import requests
 import yaml
 from sqlalchemy import text, select
+import pdb
 
 import app.wof as wof
 from app import app, db
@@ -178,6 +179,7 @@ def remove_installed_files():
 def clean_install():
     remove_installed_files()
     start_time = time.time()
+    pdb.set_trace()
 
     if not os.path.exists(f'{os.environ.get("WOF_SQLITE_PATH")}'):
         print('Creating WOF database')
@@ -189,6 +191,7 @@ def clean_install():
         print(f'Completed creating singular wof lookup db in {'%.2f' % (extraction_time)} seconds')
     initialize_db()
     load_database()
+
     print(f'Completed initial setup in {'%.2f' % (time.time() - start_time)} seconds!')
 
 
