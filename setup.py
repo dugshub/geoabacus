@@ -14,10 +14,12 @@ from sqlalchemy import text, select
 import app.wof as wof
 from app import app, db
 from app.models import createShapefile, Locality, Shapefile
+from config import basedir
 
 dotenv.load_dotenv(dotenv_path='.env_dev')
 
 wof_dir = f'{os.environ.get("WOF_DB_DIRECTORY")}'
+sqlite_db_path = f"{basedir}/databases/{os.environ.get('SQLITE_DATABASE_NAME')}"
 provided_cities = yaml.safe_load(open('locality_configs.yml'))['reporting_market']
 
 
@@ -83,7 +85,6 @@ def create_wof_lookup():
         print(f'Removing {db_path}.')
         os.remove(db_path)
     os.rename(largest_db, f'{os.environ.get("WOF_SQLITE_PATH")}')
-    print(f'{os.environ.get("WOF_SQLITE_PATH")}')
 
 
 def initialize_db():
@@ -168,8 +169,8 @@ def load_database():
 
 
 def remove_installed_files():
-    if os.path.exists(f'{os.environ.get("SQLITE_DATABASE_PATH")}'):
-        os.remove(f'{os.environ.get("SQLITE_DATABASE_PATH")}')
+    if os.path.exists(sqlite_db_path):
+        os.remove(sqlite_db_path)
 
     if os.path.exists('migrations'):
         shutil.rmtree('migrations')
@@ -179,7 +180,7 @@ def clean_install():
     remove_installed_files()
     start_time = time.time()
 
-    if not os.path.exists(f'{os.environ.get("WOF_SQLITE_PATH")}'):
+    if not os.path.exists(sqlite_db_path):
         print('Creating WOF database')
         get_wof_dbs()
         download_time = time.time() - start_time
@@ -193,7 +194,7 @@ def clean_install():
 
 
 def main():
-    if not os.path.exists(os.environ.get("SQLITE_DATABASE_PATH")):
+    if not os.path.exists(sqlite_db_path):
         print('Performing Fresh Install')
         clean_install()
 
