@@ -25,6 +25,7 @@ build-image:
 	-f ./Dockerfile \
 	-t ${IMAGE_NAME}:${TAG} . \
 
+
 rebuild-db:
 	python setup.py
 
