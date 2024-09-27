@@ -12,6 +12,7 @@ from shapely.geometry import shape
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+import app.wof as wof
 from app import db, ma
 from config import placetype_hierarchy
 
@@ -27,6 +28,7 @@ class Shapefile(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     placetype: Mapped[str]
     bbox: Mapped[str] = mapped_column()  #: Mapped[list] = mapped_column(nullable=False)
+    geom_type: Mapped[str] = mapped_column()
     geometry: Mapped[Geometry] = mapped_column(Geometry(geometry_type='GEOMETRY'))
 
     __mapper_args__ = {
@@ -169,7 +171,13 @@ def createShapefile(shapefile):
     id = shapefile.id
     placetype = shapefile.properties.get('wof:placetype')
     bbox = "".join(str(shapefile.bbox))
-    geometry = shape(shapefile.geometry).wkt
+    geom_type = shapefile.geometry.get('type')
+    geometry = shapefile.geometry
+    if geom_type == 'Point' and shapefile.properties.get('wof:geom_alt'):
+            wof.from_ids(wof_ids=[id],include_alt_geom=True)
+            geometry = shape(wof.from_ids(wof_ids=[id],include_alt_geom=True)[0].geometry).wkt
+    else:
+        geometry = shape(shapefile.geometry).wkt
     hierarchy = shapefile.properties.get('wof:hierarchy')[0]  # by deafault, we use the first hierarchy.
 
     # The following sets the 'parent layer' for the placetype in question. This is based on the hierarchy defined
@@ -192,6 +200,7 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
+                geom_type=geom_type,
                 name=shapefile.properties.get('wof:name'),
                 hierarchy_parent_id=parent_id,
             )
@@ -202,6 +211,7 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
+                geom_type=geom_type,
                 name=shapefile.properties.get('wof:name'),
                 hierarchy_parent_id=parent_id,
             )
@@ -211,6 +221,7 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
+                geom_type=geom_type,
                 name=shapefile.properties.get('wof:name')
             )
         case 'region':
@@ -219,6 +230,7 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
+                geom_type=geom_type,
                 name=shapefile.properties.get('wof:name'),
                 hierarchy_parent_id=parent_id,
             )
@@ -228,6 +240,7 @@ def createShapefile(shapefile):
                 placetype=placetype,
                 bbox=bbox,
                 geometry=geometry,
+                geom_type=geom_type,
                 name=shapefile.properties.get('wof:name')
             )
 

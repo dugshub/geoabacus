@@ -5,8 +5,8 @@ DOCKER_USERNAME=dugsdocker
 
 
 ##MOUNTS###
-WOF_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wofdata/wof
-SQLITE_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wofdata/abacus
+WOF_DATABASE_MOUNT=~/Documents/pythonProjects/abacus2/wof_datasets
+SQLITE_DATABASE_MOUNT=~/Documents/pythonProjects/abacus2/databases
 
 ##internal folders for mount##
 WOF_DB_DIRECTORY=wof_datasets/
@@ -21,7 +21,7 @@ WOF_SQLITE_PATH=wof_datasets/wof.db
 .PHONY: build-image
 build-image:
 	docker build \
-	--platform linux/amd64 \
+	--platform linux/amd64,linux/arm64 \
 	-f ./Dockerfile \
 	-t ${IMAGE_NAME}:${TAG} . \
 

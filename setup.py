@@ -19,6 +19,7 @@ from config import basedir
 dotenv.load_dotenv(dotenv_path='.env_dev')
 
 wof_dir = f'{os.environ.get("WOF_DB_DIRECTORY")}'
+wof_sqlite_path = f'{os.environ.get("WOF_DB_DIRECTORY")}'
 sqlite_db_path = f"{basedir}/databases/{os.environ.get('SQLITE_DATABASE_NAME')}"
 provided_cities = yaml.safe_load(open('locality_configs.yml'))['reporting_market']
 
@@ -137,7 +138,7 @@ def _load_related_neighbourhoods(cities=None):
                 db.session.commit()
 
 
-def _load_placetypes(filtered_placetypes=('country', 'region', 'county')):
+def _load_placetypes(filtered_placetypes=('country', 'region',  'county')):
     print(f'Loading remaining placetypes: {filtered_placetypes} ')
 
     print('Gathering the Geojson files from the WhosOnFirst Database')
@@ -163,12 +164,12 @@ def load_database():
     _load_related_neighbourhoods()
     lap2 = time.time()
     print(f'Completed in {'%.2f' % (lap2 - start_time)} seconds')
-    _load_placetypes(filtered_placetypes=('country', 'region','county'))
+    _load_placetypes(filtered_placetypes=('country', 'region'))#, 'county'))
     print(f'Completed in {'%.2f' % (time.time() - lap2)} seconds')
     print(f'Database loading complete! Total time: {'%.2f' % (time.time() - start_time)}')
 
 
-def remove_installed_files():
+def remove_db_files():
     if os.path.exists(sqlite_db_path):
         os.remove(sqlite_db_path)
 
@@ -177,10 +178,10 @@ def remove_installed_files():
 
 
 def clean_install():
-    remove_installed_files()
+    remove_db_files()
     start_time = time.time()
 
-    if not os.path.exists(sqlite_db_path):
+    if not os.path.exists(wof_sqlite_path):
         print('Creating WOF database')
         get_wof_dbs()
         download_time = time.time() - start_time

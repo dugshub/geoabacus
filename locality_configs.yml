@@ -13,10 +13,20 @@ reporting_market:
     id: 85923517
   - Name: "Seattle"
     id: 101730401
-  - Name: "San Fransisco"
+  - Name: "San Francisco"
     id: 85922583
     alt_shape: "alt-mapzen"
-  - Miami:
+  - Name: "Miami"
     id: 85933669
-
-
+  - Name: "Houston"
+    id: 101725629
+  - Name: "Nashville"
+    id: 101723183
+  - Name: "Milwaukee"
+    id: 1259598703
+  - Name: "Minneapolis"
+    id: 1729436991
+  - Name: "Indianapolis"
+    id: 1260310291
+  - Name: "Detroit"
+    id: 85951091
