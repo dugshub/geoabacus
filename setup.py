@@ -13,15 +13,17 @@ from sqlalchemy import text, select
 
 import app.wof as wof
 from app import app, db
-from app.models import createShapefile, Locality, Shapefile
+from app.models import create_shapefile, Locality, Shapefile
 from config import basedir
 
 dotenv.load_dotenv(dotenv_path='.env_dev')
 
 wof_dir = f'{os.environ.get("WOF_DB_DIRECTORY")}'
+wof_db_path = f'{os.environ.get("WOF_DB_DIRECTORY")}/wof.db'
 wof_sqlite_path = f'{os.environ.get("WOF_DB_DIRECTORY")}'
 sqlite_db_path = f"{basedir}/databases/{os.environ.get('SQLITE_DATABASE_NAME')}"
 provided_cities = yaml.safe_load(open('locality_configs.yml'))['reporting_market']
+markets = yaml.safe_load(open('location_configs.yml'))
 
 
 def get_wof_download_links():
@@ -109,32 +111,36 @@ def initialize_db():
 
 def _load_supplied_cities():
     print('Loading cities from the list in the config file')
-    wof_ids = []
-    for city in provided_cities:
-        wof_ids.append(city['id'])
+    wof_ids = [market.get('id') for market in markets['reporting_market']]
     wof_ids = tuple(wof_ids)
     wof_items = wof.from_ids(wof_ids)
 
+    shapefile_objects = []
     with app.app_context() as session:
         query = select(Shapefile.id)
         existing_cities = db.session.scalars(query).all()
         for wof_item in wof_items:
             if wof_item.id not in existing_cities:
-                db.session.add(createShapefile(wof_item))
+                shapefile_objects.append(create_shapefile(wof_item))
+
+        shapefile_objects = [shapefile_object for shapefile_object in shapefile_objects if shapefile_object]
+        db.session.add_all(shapefile_objects)
         db.session.commit()
 
 
-def _load_related_neighbourhoods(cities=None):
+def _load_related_neighbourhoods(cities=None,src_geometry=None):
     print('Loading neighbourhoods for the provided cities')
+    shapefile_objects = []
     with app.app_context() as session:
         if cities is None:
             cities = db.session.scalars(select(Locality)).all()
             for city in cities:
                 shapefiles = wof.get_related_placetypes(wof_ids=(city.id, ''),
                                                         placetypes=(
-                                                            'neighbourhood', ''))
-                for shapefile in shapefiles:
-                    db.session.add(createShapefile(shapefile))
+                                                            'neighbourhood',''))
+                shapefile_objects = [create_shapefile(shapefile) for shapefile in shapefiles]
+                shapefile_objects = [shapefile_object for shapefile_object in shapefile_objects if shapefile_object]
+                db.session.add_all(shapefile_objects)
                 db.session.commit()
 
 
@@ -148,7 +154,7 @@ def _load_placetypes(filtered_placetypes=('country', 'region',  'county')):
     with app.app_context():
         count_shapefiles = len(shapefiles)
         for idx, shapefile in enumerate(shapefiles):
-            db.session.add(createShapefile(shapefile))
+            db.session.add(create_shapefile(shapefile))
         print(f'Created {count_shapefiles} Shapefile Objects. Saving to db. \nThis may take a while...')
         db.session.commit()
 
@@ -181,7 +187,7 @@ def clean_install():
     remove_db_files()
     start_time = time.time()
 
-    if not os.path.exists(wof_sqlite_path):
+    if not os.path.exists(wof_db_path):
         print('Creating WOF database')
         get_wof_dbs()
         download_time = time.time() - start_time

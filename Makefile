@@ -5,8 +5,8 @@ DOCKER_USERNAME=dugsdocker
 
 
 ##MOUNTS###
-WOF_DATABASE_MOUNT=~/Documents/pythonProjects/abacus2/wof_datasets
-SQLITE_DATABASE_MOUNT=~/Documents/pythonProjects/abacus2/databases
+WOF_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wof_datasets/wof_datasets
+SQLITE_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wof_datasets/databases
 
 ##internal folders for mount##
 WOF_DB_DIRECTORY=wof_datasets/
@@ -49,3 +49,7 @@ docker-run:
 docker-push:
 	docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG} ;\
 	docker push ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG} ;\
+
+.PHONY: run
+run:
+	uvicorn app:connex_app --host 0.0.0.0 --reload

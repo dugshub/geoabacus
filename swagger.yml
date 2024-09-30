@@ -29,6 +29,15 @@ components:
         type: "string"
 
 paths:
+  /placetypes:
+    get:
+      operationId: "routes.from_ids"
+      tags:
+        - Localities
+      summary: "Get objects objects for all localities"
+      responses:
+        "200":
+          description: "Successfully read localities"
   /localities:
     get:
       operationId: "routes.get_all_localities"
@@ -38,6 +47,15 @@ paths:
       responses:
         "200":
           description: "Successfully read localities"
+  /random/:
+    get:
+      operationId: "routes.random_custom_pulls"
+      tags:
+        - Neighbourhoods
+      summary: "Get Geojson objects for all neighbourhoods"
+      responses:
+        "200":
+          description: "Successfully read neighbourhoods"
   /neighbourhoods/:
     get:
       operationId: "routes.get_all_neighbourhoods"

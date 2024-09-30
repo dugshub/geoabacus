@@ -13,6 +13,8 @@ reporting_market:
     id: 85923517
   - Name: "Seattle"
     id: 101730401
+    manual_neighbourhoods:
+      - 420783249
   - Name: "San Francisco"
     id: 85922583
     alt_shape: "alt-mapzen"
