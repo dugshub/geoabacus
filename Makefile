@@ -1,4 +1,5 @@
 IMAGE_NAME=geoabacus
+DOCKER_USERNAME=dugdocker
 TAG=latest
 DOCKER_USERNAME=dugsdocker
 
@@ -8,7 +9,6 @@ DOCKER_USERNAME=dugsdocker
 WOF_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wof_datasets/wof_datasets
 SQLITE_DATABASE_MOUNT=/Users/dug/projects/geoabacus/wof_datasets/databases
 
-##internal folders for mount##
 WOF_DB_DIRECTORY=wof_datasets/
 SQLITE_DB_DIRECTORY=databases/
 SQLITE_DATABASE_NAME=abacus.db
@@ -17,6 +17,7 @@ WHOSONFIRST_PATH=/Users/dug/projects/WhosOnFirstData/whosonfirst-data-admin-ca
 WOF_COUNTRIES='["CA","US"]'
 WOF_DOWNLOAD_LINK=https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-%s-latest.db.bz2
 WOF_SQLITE_PATH=wof_datasets/wof.db
+SQLITE_DATABASE_PATH=database/abacus.db
 
 .PHONY: build-image
 build-image:
@@ -44,7 +45,6 @@ docker-run:
 		--env WOF_SQLITE_PATH=${WOF_SQLITE_PATH} \
 		--rm ${IMAGE_NAME}:${TAG} \
 
-
 .PHONY: docker-push
 docker-push:
 	docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG} ;\
@@ -53,3 +53,4 @@ docker-push:
 .PHONY: run
 run:
 	uvicorn app:connex_app --host 0.0.0.0 --reload
+
