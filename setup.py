@@ -171,7 +171,7 @@ def load_database():
     _load_related_neighbourhoods()
     lap2 = time.time()
     print(f'Completed in {'%.2f' % (lap2 - start_time)} seconds')
-    _load_placetypes(filtered_placetypes=('country', 'region'))#, 'county'))
+    _load_placetypes(filtered_placetypes=('country', 'region'))
     print(f'Completed in {'%.2f' % (time.time() - lap2)} seconds')
     print(f'Database loading complete! Total time: {'%.2f' % (time.time() - start_time)}')
 
@@ -187,7 +187,6 @@ def remove_db_files():
 def clean_install():
     remove_db_files()
     start_time = time.time()
-    pdb.set_trace()
 
     if not os.path.exists(wof_db_path):
         print('Creating WOF database')

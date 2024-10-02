@@ -32,7 +32,7 @@ class Shapefile(db.Model):
     placetype: Mapped[str]
     bbox: Mapped[str] = mapped_column()  #: Mapped[list] = mapped_column(nullable=False)
     geom_type: Mapped[str] = mapped_column()
-    geometry: Mapped[Geometry] = mapped_column(Geometry(geometry_type='GEOMETRY'))
+    geometry: Mapped[WKBElement] = mapped_column(Geometry(geometry_type='GEOMETRY'))
 
     __mapper_args__ = {
         "polymorphic_on": "placetype",
@@ -176,14 +176,13 @@ feature_schema = ShapeFeatureSchema()
 features_schema = FeatureSchema(many=True)
 
 
-def create_shapefile(shapefile, excluded_shapes=[],preferred_shape=None):
+def create_shapefile(shapefile, excluded_shapes=[], preferred_shape=None):
     id = shapefile.id
     placetype = (shapefile.properties.get('wof:placetype')) or 'neighbourhood'
     bbox = "".join(str(shapefile.bbox))
     geom_type = shapefile.geometry.get('type')
     geometry = shapely.geometry.shape(shapefile.geometry).wkt
     source_geom = shapefile.properties.get('src:geom')
-
 
     if source_geom in excluded_shapes:
         alt_geoms = shapefile.properties.get('alt:geom')
@@ -192,7 +191,8 @@ def create_shapefile(shapefile, excluded_shapes=[],preferred_shape=None):
                 return
 
 
-        else: return
+        else:
+            return
 
     if geom_type == 'Point' and shapefile.properties.get('wof:geom_alt'):
         ## Checks if the value is a point and if the properties state it has alternate geometry
@@ -202,8 +202,10 @@ def create_shapefile(shapefile, excluded_shapes=[],preferred_shape=None):
         alt_geoms = wof.from_ids(wof_ids=[id], include_alt_geom=True)
 
         if len(alt_geoms) > 0:
-            #now that we've checked for the atual alt geom, we need to ensure that it does exist before replacing the existing geom
-            alt_geojson = [alt_geom for alt_geom in alt_geoms if alt_geom.properties.get('src:geom') not in excluded_shapes][0].geometry
+            # now that we've checked for the atual alt geom, we need to ensure that it does exist before replacing the existing geom
+            alt_geojson = \
+            [alt_geom for alt_geom in alt_geoms if alt_geom.properties.get('src:geom') not in excluded_shapes][
+                0].geometry
             geometry = shape(alt_geojson).wkt
             geom_type = alt_geojson.get('type')
             source_geom = alt_geojson.get('src:geom')
