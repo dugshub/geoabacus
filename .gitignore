@@ -1,3 +1,4 @@
 .venv/
 __pycache__/
 wof_datasets/wof.db
+locations.csv

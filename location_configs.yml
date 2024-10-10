@@ -1,0 +1,73 @@
+reporting_market:
+  - name: Chicago
+    id: 85940195
+    neighbourhood_src: zolk
+    excluded_neighbourhoods:
+      - 102061079
+      - 85865889
+    to_do:
+      - '85867607 - Galewood - manually draw'
+      - '85867689 - Montclare - manually draw'
+  - name: New York
+    id: 85977539
+  - name: Washington
+    id: 85931779
+    manual_neighbourhoods:
+      - 420510983
+  - name: Toronto
+    id: 101735835
+    manual_neighbourhoods:
+      - 420781855
+  - name: Boston
+    id: 85950361
+  - name: Los Angeles
+    id: 85923517
+    localities_as_neighbourhoods:
+      San Fernando: 85923843
+      Beverly Hills: 85923701
+      West Hollywood: 85923767
+      Santa Monica: 85923817
+      View Park-Windsor Hills: 85928413
+      Ladera Heights: 85928349
+      Culver City: 85923649
+      Marina del Rey: 85928367
+  - name: Seattle
+    id: 101730401
+    manual_neighbourhoods:
+      - 420783249
+  - name: San Francisco
+    id: 85922583
+    alt_shape: "alt-mapzen"
+  - name: Miami
+    id: 85933669
+  - name: Miami Beach
+    id: 85933671
+  - name: Houston
+    id: 101725629
+    excluded_shapes:
+      - mz
+    excluded_neighbourhoods:
+      - 85869253
+      - 85807823
+    manual_neighbourhoods:
+      - 85856543
+  - name: Nashville
+    id: 101723183
+    excluded_shapes:
+      - mz
+      - quattroshapes
+      - quattroshapes_pg
+      - qs_pg
+  - name: Milwaukee
+    id: 101732987
+  - name: Minneapolis
+    id: 85969169
+  - name: Indianapolis
+    id: 85942569
+  - name: Detroit
+    id: 85951091
+    excluded_shapes:
+      - quattroshapes
+      - quattroshapes_pg
+    preferred_shape:
+      - zetashapes

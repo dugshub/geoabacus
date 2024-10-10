@@ -14,12 +14,17 @@ import pdb
 
 import app.wof as wof
 from app import app, db
-from app.models import createShapefile, Locality, Shapefile
+from app.models import create_shapefile, Locality, Shapefile
+from config import basedir
 
 dotenv.load_dotenv(dotenv_path='.env_dev')
 
 wof_dir = f'{os.environ.get("WOF_DB_DIRECTORY")}'
+wof_db_path = f'{os.environ.get("WOF_DB_DIRECTORY")}/wof.db'
+wof_sqlite_path = f'{os.environ.get("WOF_DB_DIRECTORY")}'
+sqlite_db_path = f"{basedir}/databases/{os.environ.get('SQLITE_DATABASE_NAME')}"
 provided_cities = yaml.safe_load(open('locality_configs.yml'))['reporting_market']
+markets = yaml.safe_load(open('location_configs.yml'))
 
 
 def get_wof_download_links():
@@ -84,7 +89,6 @@ def create_wof_lookup():
         print(f'Removing {db_path}.')
         os.remove(db_path)
     os.rename(largest_db, f'{os.environ.get("WOF_SQLITE_PATH")}')
-    print(f'{os.environ.get("WOF_SQLITE_PATH")}')
 
 
 def initialize_db():
@@ -108,36 +112,40 @@ def initialize_db():
 
 def _load_supplied_cities():
     print('Loading cities from the list in the config file')
-    wof_ids = []
-    for city in provided_cities:
-        wof_ids.append(city['id'])
+    wof_ids = [market.get('id') for market in markets['reporting_market']]
     wof_ids = tuple(wof_ids)
     wof_items = wof.from_ids(wof_ids)
 
+    shapefile_objects = []
     with app.app_context() as session:
         query = select(Shapefile.id)
         existing_cities = db.session.scalars(query).all()
         for wof_item in wof_items:
             if wof_item.id not in existing_cities:
-                db.session.add(createShapefile(wof_item))
+                shapefile_objects.append(create_shapefile(wof_item))
+
+        shapefile_objects = [shapefile_object for shapefile_object in shapefile_objects if shapefile_object]
+        db.session.add_all(shapefile_objects)
         db.session.commit()
 
 
-def _load_related_neighbourhoods(cities=None):
+def _load_related_neighbourhoods(cities=None,src_geometry=None):
     print('Loading neighbourhoods for the provided cities')
+    shapefile_objects = []
     with app.app_context() as session:
         if cities is None:
             cities = db.session.scalars(select(Locality)).all()
             for city in cities:
                 shapefiles = wof.get_related_placetypes(wof_ids=(city.id, ''),
                                                         placetypes=(
-                                                            'neighbourhood', ''))
-                for shapefile in shapefiles:
-                    db.session.add(createShapefile(shapefile))
+                                                            'neighbourhood',''))
+                shapefile_objects = [create_shapefile(shapefile) for shapefile in shapefiles]
+                shapefile_objects = [shapefile_object for shapefile_object in shapefile_objects if shapefile_object]
+                db.session.add_all(shapefile_objects)
                 db.session.commit()
 
 
-def _load_placetypes(filtered_placetypes=('country', 'region', 'county')):
+def _load_placetypes(filtered_placetypes=('country', 'region',  'county')):
     print(f'Loading remaining placetypes: {filtered_placetypes} ')
 
     print('Gathering the Geojson files from the WhosOnFirst Database')
@@ -147,7 +155,7 @@ def _load_placetypes(filtered_placetypes=('country', 'region', 'county')):
     with app.app_context():
         count_shapefiles = len(shapefiles)
         for idx, shapefile in enumerate(shapefiles):
-            db.session.add(createShapefile(shapefile))
+            db.session.add(create_shapefile(shapefile))
         print(f'Created {count_shapefiles} Shapefile Objects. Saving to db. \nThis may take a while...')
         db.session.commit()
 
@@ -163,25 +171,24 @@ def load_database():
     _load_related_neighbourhoods()
     lap2 = time.time()
     print(f'Completed in {'%.2f' % (lap2 - start_time)} seconds')
-    _load_placetypes(filtered_placetypes=('country', 'region','county'))
+    _load_placetypes(filtered_placetypes=('country', 'region'))
     print(f'Completed in {'%.2f' % (time.time() - lap2)} seconds')
     print(f'Database loading complete! Total time: {'%.2f' % (time.time() - start_time)}')
 
 
-def remove_installed_files():
-    if os.path.exists(f'{os.environ.get("SQLITE_DATABASE_PATH")}'):
-        os.remove(f'{os.environ.get("SQLITE_DATABASE_PATH")}')
+def remove_db_files():
+    if os.path.exists(sqlite_db_path):
+        os.remove(sqlite_db_path)
 
     if os.path.exists('migrations'):
         shutil.rmtree('migrations')
 
 
 def clean_install():
-    remove_installed_files()
+    remove_db_files()
     start_time = time.time()
-    pdb.set_trace()
 
-    if not os.path.exists(f'{os.environ.get("WOF_SQLITE_PATH")}'):
+    if not os.path.exists(wof_db_path):
         print('Creating WOF database')
         get_wof_dbs()
         download_time = time.time() - start_time
@@ -196,7 +203,7 @@ def clean_install():
 
 
 def main():
-    if not os.path.exists(os.environ.get("SQLITE_DATABASE_PATH")):
+    if not os.path.exists(sqlite_db_path):
         print('Performing Fresh Install')
         clean_install()
 
